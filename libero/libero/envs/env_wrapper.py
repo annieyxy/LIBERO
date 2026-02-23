@@ -84,6 +84,14 @@ class ControlEnv:
     def obj_of_interest(self):
         return self.env.obj_of_interest
 
+    # @property
+    # def parsed_problem(self):
+    #     return self.env.parsed_problem
+
+    # @property
+    # def objects_dict(self):
+    #     return self.env.objects_dict
+
     def step(self, action):
         return self.env.step(action)
 

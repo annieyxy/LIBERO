@@ -1,5 +1,6 @@
 import abc
 import os
+import pickle
 import glob
 import random
 import torch
@@ -161,7 +162,13 @@ class Benchmark(abc.ABC):
             self.tasks[i].problem_folder,
             self.tasks[i].init_states_file,
         )
-        init_states = torch.load(init_states_path)
+        try:
+            init_states = torch.load(init_states_path)
+        except pickle.UnpicklingError as exc:
+            # PyTorch 2.6+ defaults to weights_only=True; LIBERO init states are not model weights.
+            if "Weights only load failed" not in str(exc):
+                raise
+            init_states = torch.load(init_states_path, weights_only=False)
         return init_states
 
     def set_task_embs(self, task_embs):
